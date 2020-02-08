@@ -25,8 +25,7 @@ def job():
         rank = item.find('div', {'class': 'num'}).text
         visit = item.find('span', {'class': 'data-box'}).text
         up = item.find_all('a')[2].text
-        space = item.find_all('a')[2].get('href')
-        up_id = space[len('//space.bilibili.com/'):]
+        up_id = item.find_all('a')[2].get('href')[len('//space.bilibili.com/'):]
         url = item.find('a', {'class': 'title'}).get('href')
         av_id = url[len('https://www.bilibili.com/video/'):]
         # 添加到数据库
