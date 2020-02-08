@@ -51,7 +51,7 @@ def add_database(rank, title, score, visit, up, up_id, av_id, url):
 
 
 # 每天12点半执行
-schedule.every().day.at("13:56").do(job)
+schedule.every().day.at("17:00").do(job)
 
 
 # 入口
