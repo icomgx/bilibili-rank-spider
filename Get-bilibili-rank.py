@@ -1,5 +1,5 @@
 import requests
-import pymysql
+import sqlite3
 import schedule
 import time
 from bs4 import BeautifulSoup
@@ -35,10 +35,11 @@ def job():
 
 
 def add_database(rank, title, score, visit, up, up_id, av_id, url):
-    con = pymysql.connect(host="localhost", user="root", password="150623", database="bilibili_rank", charset="utf8")
+    con = sqlite3.connect('database/bilibili_rank.db3')
     cursor = con.cursor()
     sql = f'INSERT INTO rank_list(rank,title,score,visit,up,up_id,av_id,url,get_time)' \
-          f'VALUES(\'{rank}\',\'{title}\',\'{score}\',\'{visit}\',\'{up}\',\'{up_id}\',\'{av_id}\',\'{url}\',now())'
+          f'VALUES(\'{rank}\',\'{title}\',\'{score}\',\'{visit}\',\'{up}\',\'{up_id}\',\'{av_id}\',\'{url}\',' \
+          f'datetime(\'now\')) '
     # 执行SQL语句
     cursor.execute(sql)
     # 提交事务
