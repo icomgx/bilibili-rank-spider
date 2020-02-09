@@ -5,6 +5,10 @@ bilibili排行榜数据可视化项目-初学者项目
 引用了 requests pymysql schedule time bs4  
 bilibili：https://space.bilibili.com/23106193  
 
+### 2020-02-09:  
+  数据库换用Sqlite
+  获取弹幕和词云模块完成  
+
 
 ### 2020-02-08:  
   数据库初步构建完成 
