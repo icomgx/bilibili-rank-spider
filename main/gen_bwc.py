@@ -5,8 +5,8 @@ from wordcloud import WordCloud
 
 
 # 分词
-def Participle(barrage_list):
-    p_list = jieba.lcut(barrage_list)
+def Participle(barrage_str):
+    p_list = jieba.lcut(barrage_str)
     return p_list
 
 
@@ -24,3 +24,15 @@ def genWordCloud(p_list, filename):
     wc = WordCloud(**w_settings).generate(w_str)
     # 保存到文件
     wc.to_file(filename)
+
+
+# 打开弹幕文件
+def read_file(filename):
+    with open(filename, mode='r', encoding='utf-8') as f:
+        barrages = f.read()
+        return barrages
+
+
+# 开始主流程
+def start(barrage_filename, word_cloud_filename):
+    genWordCloud(Participle(read_file(barrage_filename)), word_cloud_filename)
