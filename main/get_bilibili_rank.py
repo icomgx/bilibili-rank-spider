@@ -18,10 +18,12 @@ items = soup.find_all('li', {'class': 'rank-item'})
 
 av_items_list = []  # 存储需要处理的视频av号码
 
+
 # 获取当前python文件及上一级的路径，以构造稳定的sqlite文件存储路径
-current_abstract_folder=os.path.abspath('.')   #表示当前所处的文件夹的绝对路径
-project_folder=os.path.abspath('..')  #表示当前所处的文件夹上一级文件夹的绝对路径
+current_abstract_folder = os.path.abspath('.')   # 表示当前所处的文件夹的绝对路径
+project_folder = os.path.abspath('..')  # 表示当前所处的文件夹上一级文件夹的绝对路径
 sqlite_folder = project_folder+"\\database\\bilibili_rank.db3"
+
 
 # 主工作流程
 def main_func():
@@ -31,10 +33,9 @@ def main_func():
     # 建立sqlite的连接，获取游标cursor
     db_connection = sqlite3.connect(sqlite_folder)
     cursor = db_connection.cursor()
-
     ranksort_start = time.time()
 
-    item_index = 1;
+    item_index = 1
     # 遍历排行榜中的数据
     for item in items:
         title = item.find('a', {'class': 'title'}).text
@@ -94,6 +95,7 @@ def main_func():
     barrage_end = time.time()
     print("barrage Execution Time: ", barrage_end - barrage_start)
 
+
 # 将TOP100排行榜信息添加到数据库
 # def add_rank_info_into_db(db_connection,cursor,rank, title, score, visit, up, up_id, av_id, uri):
 def add_rank_info_into_db(db_connection,cursor,rank, title, score, visit, up, up_id, av_id, uri):
@@ -108,6 +110,7 @@ def add_rank_info_into_db(db_connection,cursor,rank, title, score, visit, up, up
     # cursor.close()
     # # 关闭数据库连接
     # con.close()
+
 
 # 弹幕信息添加到数据库
 # av_id 弹幕所属av号码 barrage_list弹幕列表
@@ -128,6 +131,7 @@ def add_video_barrage_into_db(db_connection,cursor,av_id, barrage_list):
         # # 关闭数据库连接
         # con.close()
         # # print(f'av:{av_id}添加弹幕: {barrage} \r\n ok!')
+
 
 # 入口
 if __name__ == '__main__':
