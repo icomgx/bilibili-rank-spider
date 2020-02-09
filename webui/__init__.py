@@ -5,7 +5,11 @@ from flask import *
 app = Flask("bilibili_rank_spider_ui")
 
 @app.route("/")
-def index():
-    return redirect(
-        "/"
+def root_uri():
+    return redirect("/index")
+
+@app.route("/index")
+def index_page():
+    return render_template(
+        "index.html"
     )
