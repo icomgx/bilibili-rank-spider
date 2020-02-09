@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/bilibili-rank-spider.iml" filepath="$PROJECT_DIR$/.idea/bilibili-rank-spider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/bilibili_spider_team_edition.iml" filepath="$PROJECT_DIR$/.idea/bilibili_spider_team_edition.iml" />
     </modules>
   </component>
 </project>
