@@ -4,6 +4,10 @@ import sqlite3
 import schedule
 import time
 from bs4 import BeautifulSoup
+from .get_video_barrage import *
+from .generate_bwc import *
+
+
 
 # 要请求的地址
 url = 'https://www.bilibili.com/ranking'
