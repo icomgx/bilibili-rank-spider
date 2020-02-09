@@ -5,11 +5,16 @@ bilibili排行榜数据可视化项目-初学者项目
 引用了 requests sqlite3 schedule time bs4 jieba分词 wordcloud词云
 bilibili：https://space.bilibili.com/23106193  
 
-### 2020-02-09:  
-  数据库换用Sqlite  
-  获取弹幕和词云模块完成  
+### 2020-02-09 #2:
+ - 添加WebUI模块
+ - 添加startup_tools.py，一键开启程序
+
+
+### 2020-02-09 #1:  
+ - 数据库换用Sqlite  
+ - 获取弹幕和词云模块完成  
 
 
 ### 2020-02-08:  
-  数据库初步构建完成   
-  基础代码完成可以定时运行  
+ - 数据库初步构建完成   
+ - 基础代码完成可以定时运行  

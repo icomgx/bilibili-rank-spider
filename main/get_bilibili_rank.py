@@ -7,16 +7,24 @@ from bs4 import BeautifulSoup
 from .get_video_barrage import *
 from .generate_bwc import *
 
+def run_timer():
+    timer = input('请输入每天定时获取的时间如\"20:00\":')
+    schedule.every().day.at(timer).do(job)
+    print('定时服务启动...')
+    while True:
+        schedule.run_pending()  # 运行所有可运行的任务
+        time.sleep(1)
 
-
-# 要请求的地址
-url = 'https://www.bilibili.com/ranking'
-# 获取请求内容
-response = requests.get(url)
-# 解析内容
-soup = BeautifulSoup(response.text, 'html.parser')
-# 列表解析到数组
-items = soup.find_all('li', {'class': 'rank-item'})
+def run():
+    global soup, items
+    # 要请求的地址
+    url = 'https://www.bilibili.com/ranking'
+    # 获取请求内容
+    response = requests.get(url)
+    # 解析内容
+    soup = BeautifulSoup(response.text, 'html.parser')
+    # 列表解析到数组
+    items = soup.find_all('li', {'class': 'rank-item'})
 
 
 def job():
@@ -75,12 +83,6 @@ def add_video_barrage(av_id, barrage_list):
 
 # 入口
 if __name__ == '__main__':
-    job()
+    run()
 
 # 每天到指定的时间执行拉取
-# timer = input('请输入每天定时获取的时间如\"20:00\":')
-# schedule.every().day.at(timer).do(job)
-# print('定时服务启动...')
-# while True:
-#     schedule.run_pending()  # 运行所有可运行的任务
-#     time.sleep(1)
