@@ -17,11 +17,6 @@ def download_page(url):
 
 # 根据视频的av号获取cid
 def get_cid(av):
-    """
-    根据视频的av号获取cid
-    :param av: B站视频的AV号  如：https://www.bilibili.com/video/av83743079
-    :return: 视频的cid号
-    """
     av = av.strip('av')
     url = f'https://api.bilibili.com/x/player/pagelist?aid={av}&jsonp=jsonp'
     res = download_page(url)
@@ -35,7 +30,7 @@ def get_cid(av):
 def get_dan_mu(cid):
     """
     根据cid请求弹幕
-    :param cid: 视频的cid号
+    :param cid: 视频cid号
     :return: 弹幕列表
     """
     url = f'https://api.bilibili.com/x/v1/dm/list.so?oid={cid}'
@@ -45,16 +40,4 @@ def get_dan_mu(cid):
     dan_mu_list = pattern.findall(res_xml)
     return dan_mu_list
 
-
-# 把弹幕写入到文件中
-def save_to_file(dan_mu_list, filename):
-    """
-    把弹幕写入到文件中
-    :param dan_mu_list: 弹幕列表
-    :param filename: 保存的文件名
-    """
-    with open(filename, mode='w', encoding='utf-8') as f:
-        for one_dan_mu in dan_mu_list:
-            f.write(one_dan_mu)
-            f.write('\n')
 
