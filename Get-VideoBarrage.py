@@ -28,11 +28,6 @@ def get_cid(av):
 
 # 根据cid请求弹幕
 def get_dan_mu(cid):
-    """
-    根据cid请求弹幕
-    :param cid: 视频cid号
-    :return: 弹幕列表
-    """
     url = f'https://api.bilibili.com/x/v1/dm/list.so?oid={cid}'
     res = download_page(url)
     res_xml = res.content.decode('utf-8')
