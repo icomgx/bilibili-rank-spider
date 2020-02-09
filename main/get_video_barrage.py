@@ -14,9 +14,7 @@ def download_page(url):
     res = requests.get(url=url, headers=headers)
     return res
 
-    # 根据视频的av号获取cid
-
-
+# 根据视频的av号获取cid
 def get_cid(av):
     av = av.strip('av')
     uri = f'https://api.bilibili.com/x/player/pagelist?aid={av}&jsonp=jsonp'
@@ -26,9 +24,7 @@ def get_cid(av):
     cid = res_dict['data'][0]['cid']
     return cid
 
-    # 根据cid请求弹幕
-
-
+# 根据cid请求弹幕
 def get_barrage(cid):
     url = f'https://api.bilibili.com/x/v1/dm/list.so?oid={cid}'
     res = download_page(url)
@@ -36,7 +32,6 @@ def get_barrage(cid):
     pattern = re.compile('<d.*?>(.*?)</d>')
     barrage_list = pattern.findall(res_xml)
     return barrage_list
-
 
 # 把弹幕写入到文件中
 def save_to_file(barrage_list, filename):
@@ -47,5 +42,5 @@ def save_to_file(barrage_list, filename):
 
 
 # 开始主流程
-def start(av_id, filename):
+def vb_main(av_id, filename):
     save_to_file(get_barrage(get_cid(av_id)), filename)
