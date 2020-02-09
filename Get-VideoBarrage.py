@@ -2,12 +2,14 @@ import json
 import re
 import requests
 
+
 # 获取页面
-def download_page(url): 
+def download_page(url):
     # 添加请求头
     # User-Agent：浏览器
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                      'Chrome/79.0.3945.88 Safari/537.36 '
     }
     res = requests.get(url=url, headers=headers)
     return res
@@ -56,19 +58,3 @@ def save_to_file(dan_mu_list, filename):
             f.write(one_dan_mu)
             f.write('\n')
 
-
-# 弹幕爬虫主流程
-def dan_mu_spider(av):
-    # 根据视频av号获得cid
-    cid = get_cid(av)
-
-    # 根据cid爬取弹幕
-    dan_mu_list = get_dan_mu(cid)
-
-    # 把弹幕写入到文件中
-    save_to_file(dan_mu_list, f'{av}.txt')
-
-
-if __name__ == '__main__':
-    av = 'av86833490'
-    dan_mu_spider(av)
