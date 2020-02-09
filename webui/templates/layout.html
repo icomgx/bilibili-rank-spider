@@ -2,11 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{title} - WebUI for Bilibili Rank Dpider</title>
+    <title>{title} - WebUI for Bilibili Rank spider</title>
     <link rel="stylesheet" href="/static/mdui.min.css">
     <script src='/static/mdui/js/mdui.min.js'></script>
 </head>
 <body>
-<div class="mdui-container">{% block body %}{% endblock %}</div>
+<div class="mdui-container">
+    <div class="mdui-appbar">
+        <div class="mdui-toolbar mdui-color-theme">
+            <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">menu</i></a>
+            <a href="javascript:;" class="mdui-typo-headline">MDUI</a>
+            <a href="javascript:;" class="mdui-typo-title">Title</a>
+            <div class="mdui-toolbar-spacer"></div>
+            <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>
+            <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>
+            <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">more_vert</i></a>
+        </div>
+    </div>
+    {% block body %}{% endblock %}
+    <center>
+        Powered By fred913 and iComgx's Atai - Bilibili rank spider
+    </center>
+</div>
 </body>
 </html>
