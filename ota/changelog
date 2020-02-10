@@ -1,0 +1,11 @@
+<!--使用HTML写changelog!!!-->
+<!--这里的样式美化直接在div里写就好了，用h1~h6、p、span、a、button都可以-->
+<!--对了，button加两个class："mdui-btn mdui-ripple"-->
+<div class="mdui-typo">
+    <h3>
+        本次更新添加了版本更新显示changelog的功能
+    </h3>
+    <h5>
+        暂不支持在线更新，请手动进行git pull
+    </h5>
+</div>
