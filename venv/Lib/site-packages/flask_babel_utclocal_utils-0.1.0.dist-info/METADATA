@@ -1,0 +1,28 @@
+Metadata-Version: 2.0
+Name: flask-babel-utclocal-utils
+Version: 0.1.0
+Summary: UTC to local (and vice versa) datetime conversion utilities for use with Flask-Babel.
+Home-page: https://github.com/Jaza/flask-babel-utclocal-utils
+Author: Jeremy Epstein
+Author-email: jazepstein@gmail.com
+License: UNKNOWN
+Platform: any
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.3
+Requires-Dist: Flask
+Requires-Dist: Flask-Babel
+
+flask-babel-utclocal-utils
+==========================
+
+UTC to local (and vice versa) datetime conversion utilities for use with Flask-Babel.
+
+
+
