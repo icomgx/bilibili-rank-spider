@@ -10,6 +10,9 @@ bilibili排行榜数据可视化项目-初学者项目
  - BeautifulSoup4
  - [jieba](https://github.com/LiveMirror/jieba "Github")
  - wordcloud
+ - Flask
+ - Flask-Babel
+ - json
 
 #### 开发人员:  
  - ShengFAN_ [bilibili](https://space.bilibili.com/496636524 "前往他的bilibili")
