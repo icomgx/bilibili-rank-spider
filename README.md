@@ -8,7 +8,7 @@ bilibili排行榜数据可视化项目-初学者项目
  - [schedule](https://github.com/dbader/schedule "Github")
  - time
  - os
- - [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/ "BeautifulSoup4")
+ - [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/ "BeautifulSoup4"")
  - [jieba](https://github.com/LiveMirror/jieba "Github")
  - [wordcloud](https://github.com/amueller/word_cloud "wordcloud")
  - [Flask](https://github.com/pallets/flask "Flask")
@@ -28,6 +28,10 @@ bilibili排行榜数据可视化项目-初学者项目
  - 啊泰_ [bilibili](https://space.bilibili.com/23106193 "前往他的bilibili")
 
  - ShengFAN_ [bilibili](https://space.bilibili.com/496636524 "前往他的bilibili")
+
+### 2020-02-11 #2：
+ - 删除了cid冗余代码，加快程序运行速度
+ - 完善了将不存在视频av号保存至av_id_404_list.txt功能，文件写模式为w+，并加上了注释
 
 ### 2020-02-11 #1：
  - 补充异常处理，主要包括文件夹路径不存在\网络异常\视频不存在\无权限对图片文件重写

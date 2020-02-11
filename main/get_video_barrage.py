@@ -39,12 +39,8 @@ def save_barrage_to_file(barrage_list, barrage_filename):
                 f.write('\n')
 
 # 弹幕获取主函数
-def vb_main(av_id, barrage_filename,log_general_folder):
-    status, av_cid = get_cid(av_id, log_general_folder)
-    if status == -1:
-        print("弹幕获取失败，进行下一个视频弹幕获取")
-        return -1
-    else:
-        barrage_list = get_barragelist(av_cid)
-        save_barrage_to_file(barrage_list, barrage_filename)
-        return 0
+
+def vb_main(av_cid, barrage_filename,log_general_folder):
+    barrage_list = get_barragelist(av_cid)
+    save_barrage_to_file(barrage_list, barrage_filename)
+    return 0

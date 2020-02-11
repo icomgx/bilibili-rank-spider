@@ -203,7 +203,7 @@ def bilibili_rank_main(bilibili_ranking_all_url):
             print(f'排行榜第{item_index}名信息已归档！')
             item_index += 1
 
-            # 添加对应弹幕信息到ranking_all_avid_list列表
+            # 更新ranking_all_avid_list列表
             ranking_all_avid_list.append(ranking_element.av_id)
 
             # 打印排行榜中每条视频相关信息
@@ -225,28 +225,25 @@ def bilibili_rank_main(bilibili_ranking_all_url):
         for avid in ranking_all_avid_list:
 
             # 根据完整的av号获取弹幕文件，视频状态正常时可解析到cid，否则将av号写入txt
-            status, cid = gv.get_cid(avid,log_general_folder)
-            if status < 0: # 视频异常处理，
+            status, av_cid = gv.get_cid(avid, log_general_folder)
+            if status < 0:  # 视频异常处理，
                 print(f'编号为{avid}的视频不存在')
             else:
-                barrage_list = gv.get_barragelist(cid)  # 获取对应视频av的弹幕列表
-
                 barrage_file_full_name = barrage_general_folder+f'barrage_{avid}_{time_in_filename_str}.txt'
-                status = gv.vb_main(avid, barrage_file_full_name, log_general_folder)  # 保存弹幕文件
+                status = gv.vb_main(av_cid, barrage_file_full_name, log_general_folder)  # 保存弹幕文件
 
-                if status == 0:
-                    # 由于弹幕文件较大，存在数据库IO不足的问题，故暂时不使用数据库存储
-                    # add_video_barrage_into_db(bilibili_ranking_all_db_conn,cursor,avid, barrage_list)
+                # 由于弹幕文件较大，存在数据库IO不足的问题，故暂时不使用数据库存储
+                # add_video_barrage_into_db(bilibili_ranking_all_db_conn,cursor,avid, barrage_list)
 
-                    print(f'排行榜第{barrage_item_index}名的视频弹幕已下载')
+                print(f'排行榜第{barrage_item_index}名的视频弹幕已下载')
 
-                    # 弹幕文件词云生成
-                    word_cloud_image_full_name = wordcloud_pic_general_folder+f'wordcloud_{avid}_{time_in_filename_str}.png'
-                    # 读取弹幕文件生成词云
-                    gb.bwc_main(barrage_file_full_name, word_cloud_image_full_name)
-                    print(f'排行榜第{barrage_item_index}名的视频弹幕词云已生成')
+                # 弹幕文件词云生成
+                word_cloud_image_full_name = wordcloud_pic_general_folder+f'wordcloud_{avid}_{time_in_filename_str}.png'
+                # 读取弹幕文件生成词云
+                gb.bwc_main(barrage_file_full_name, word_cloud_image_full_name)
+                print(f'排行榜第{barrage_item_index}名的视频弹幕词云已生成')
 
-                    barrage_item_index += 1
+                barrage_item_index += 1
 
         print(f'{len(ranking_all_avid_list)}个视频弹幕的爬取与词云的生成工作已完成...')
 
