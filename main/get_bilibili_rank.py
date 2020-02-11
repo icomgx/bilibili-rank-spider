@@ -31,10 +31,11 @@ ranking_all_avid_list = []  # 存储需要处理的视频av号码
 
 project_folder = os.path.abspath('..')  #表示当前所处的文件夹上一级文件夹的绝对路径
 
-db_general_folder = f'{project_folder}\\database\\'
-barrage_general_folder = f'{project_folder}\\barrage\\{time_in_filename_str}\\'
-wordcloud_pic_general_folder = f'{project_folder}\\wordCloudImg\\{time_in_filename_str}\\'
-log_general_folder = f'{project_folder}\\log\\{time_in_filename_str}\\'
+db_general_folder = f'{project_folder}\\database\\'                                             # 数据库存储路径
+barrage_general_folder = f'{project_folder}\\barrage\\{time_in_filename_str}\\'                 # 弹幕文件存储路径
+wordcloud_pic_general_folder = f'{project_folder}\\wordCloudImg\\{time_in_filename_str}\\'      # 词云存储路径
+daily_log_general_folder = f'{project_folder}\\log\\{time_in_filename_str}\\'                   # 每日日志存储路径，打算用于保存命令行中输出的文字
+general_log_general_folder = f'{project_folder}\\log\\'                                         # 总日志存储路径，不存在的视频av号列表文件即保存在这个路径下
 
 ################################
 
@@ -46,7 +47,8 @@ def ProjectFileDirCheck():
     print(f'数据库{mytool.mkdir(db_general_folder)}')
     print(f'弹幕文件{mytool.mkdir(barrage_general_folder)}')
     print(f'词云图片{mytool.mkdir(wordcloud_pic_general_folder)}')
-    print(f'爬虫日志{mytool.mkdir(log_general_folder)}')
+    print(f'爬虫总日志{mytool.mkdir(general_log_general_folder)}')
+    print(f'爬虫每日日志{mytool.mkdir(daily_log_general_folder)}')
 
 ################################
 
@@ -225,12 +227,12 @@ def bilibili_rank_main(bilibili_ranking_all_url):
         for avid in ranking_all_avid_list:
 
             # 根据完整的av号获取弹幕文件，视频状态正常时可解析到cid，否则将av号写入txt
-            status, av_cid = gv.get_cid(avid, log_general_folder)
+            status, av_cid = gv.get_cid(avid, daily_log_general_folder)
             if status < 0:  # 视频异常处理，
                 print(f'编号为{avid}的视频不存在')
             else:
                 barrage_file_full_name = barrage_general_folder+f'barrage_{avid}_{time_in_filename_str}.txt'
-                status = gv.vb_main(av_cid, barrage_file_full_name, log_general_folder)  # 保存弹幕文件
+                status = gv.vb_main(av_cid, barrage_file_full_name, general_log_general_folder)  # 保存弹幕文件
 
                 # 由于弹幕文件较大，存在数据库IO不足的问题，故暂时不使用数据库存储
                 # add_video_barrage_into_db(bilibili_ranking_all_db_conn,cursor,avid, barrage_list)
