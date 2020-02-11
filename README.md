@@ -8,7 +8,7 @@ bilibili排行榜数据可视化项目-初学者项目
  - [schedule](https://github.com/dbader/schedule "Github")
  - time
  - os
- - [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/ "BeautifulSoup4"")
+ - [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/ "BeautifulSoup4")
  - [jieba](https://github.com/LiveMirror/jieba "Github")
  - [wordcloud](https://github.com/amueller/word_cloud "wordcloud")
  - [Flask](https://github.com/pallets/flask "Flask")
