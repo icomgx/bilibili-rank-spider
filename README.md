@@ -7,12 +7,14 @@ bilibili排行榜数据可视化项目-初学者项目
  - sqlite3
  - [schedule](https://github.com/dbader/schedule "Github")
  - time
- - BeautifulSoup4
+ - os
+ - [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/ "BeautifulSoup4"")
  - [jieba](https://github.com/LiveMirror/jieba "Github")
- - wordcloud
- - Flask
- - Flask-Babel
+ - [wordcloud](https://github.com/amueller/word_cloud "wordcloud")
+ - [Flask](https://github.com/pallets/flask "Flask")
+ - [Flask-Babel](https://github.com/python-babel/flask-babel "Flask-Babel")
  - json
+
 
 
 ## WebUI引用：
@@ -27,6 +29,14 @@ bilibili排行榜数据可视化项目-初学者项目
 
  - ShengFAN_ [bilibili](https://space.bilibili.com/496636524 "前往他的bilibili")
 
+### 2020-02-11 #1：
+ - 补充异常处理，主要包括文件夹路径不存在\网络异常\视频不存在\无权限对图片文件重写
+ - 新增路径\文件存在性检查公共函数，当路径不存在时自动创建，反之则不处理
+ - 新增数据库及数据表重配置功能，并按日期格式化数据库名
+ - 将公共功能函数进行抽取，放在public_smalltool文件中
+ - 重新配置了数据库\弹幕\词云\日志文件存储路径，并按日期新建子文件夹以存储弹幕\词云\日志文件。
+ - 继续优化变量名\函数名\排版格式，通过使用对象，对部分函数的参数列表进行了归并
+
 
 ### 2020-02-10 #1:
  - 把上面三个链接替换为超链接形式
@@ -40,7 +50,6 @@ bilibili排行榜数据可视化项目-初学者项目
 ### 2020-02-09 #1:  
  - 数据库换用Sqlite  
  - 获取弹幕和词云模块完成  
-
 
  - 变量名/函数名层面进行了部分优化，增强了代码可读性
  - 将数据库连接及关闭移出循环加快运行速度
