@@ -200,7 +200,7 @@ def bilibili_rank_main(bilibili_ranking_all_url):
         # 爬取排行榜信息
         crawl_start = time.time()
 
-        item_index = 1;
+        item_index = 1
         # 遍历排行榜中的数据
         for item in website_item:
             ranking_element = ranking_item_analysis(item)
