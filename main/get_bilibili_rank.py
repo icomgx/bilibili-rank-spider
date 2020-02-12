@@ -180,11 +180,8 @@ def ranking_item_analysis(item):
     return ranking_element
 
 
-################################
-# 主功能函数
-
-def bilibili_rank_main(bilibili_ranking_all_url):
-    status, website_item = website_item_download(bilibili_ranking_all_url)
+def main(rank_url):
+    status, website_item = website_item_download(rank_url)
     if status == -1:  # 网络状态异常
         print("网络访问异常，请检查网络状态\n即将退出程序")
         return -1
@@ -264,7 +261,7 @@ def bilibili_rank_main(bilibili_ranking_all_url):
 if __name__ == '__main__':
     print(f'当前时间为{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}')
     start = time.time()
-    status = bilibili_rank_main(bilibili_ranking_all_url)
+    status = main(bilibili_ranking_all_url)
     if status == 0:  # 网络状态正常
         end = time.time()
         print(f'排行榜爬虫总耗时: {end - start}')
@@ -273,7 +270,7 @@ if __name__ == '__main__':
 
 # 每天到指定的时间执行拉取
 # timer = input('请输入每天定时获取的时间如\"20:00\":')
-# schedule.every().day.at(timer).do(bilibili_rank_main)
+# schedule.every().day.at(timer).do(main)
 # print('定时服务启动...')
 # while True:
 #     schedule.run_pending()  # 运行所有可运行的任务
