@@ -8,8 +8,8 @@ $$(function() {
             "</div>" \
             "</div>");
     }
-    function get_translate(item) {
-
+    function translate(item) {
+        $.post("/translate", {"id": item}, function())
     }
     function set_config(item, value) {
         $.post("/config", {"k": item, "v": value}, function(d, s) {

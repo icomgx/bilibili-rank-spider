@@ -28,6 +28,10 @@ bilibili排行榜数据可视化项目-初学者项目
  - ShengFAN_ [bilibili](https://space.bilibili.com/496636524 "前往他的bilibili")
 
 
+### 2020-02-10 #2:
+ - WebUI的site.js完善
+
+
 ### 2020-02-10 #1:
  - 把上面三个链接替换为超链接形式
 
