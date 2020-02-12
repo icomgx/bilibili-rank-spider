@@ -2,15 +2,19 @@
 import jieba
 # 生成词云图的库
 from wordcloud import WordCloud
+from main import public_smalltool as mytool
+import logging
+
+jieba.setLogLevel(logging.INFO) # 去除“Building prefix dict from the default dictionary ...”的提示
 
 # 分词
 def word_separate(barrage_str):
-    p_list = jieba.lcut(barrage_str)
-    return p_list
+    w_list = jieba.lcut(barrage_str)
+    return w_list
 
-# 生成词云图
-def genWordCloud(p_list, word_cloud_filename):
-    w_str = ' '.join(p_list)
+# 生成词云图并保存
+def genWordCloud(w_list, word_cloud_filename):
+    w_str = ' '.join(w_list)
     w_settings = {
         'font_path': 'msyh.ttc',  # 词云使用字体
         'width': 800,  # 生成图片宽度
@@ -19,18 +23,23 @@ def genWordCloud(p_list, word_cloud_filename):
         'max_words': 80
     }
     # 实例化云词对象
-    wc = WordCloud(**w_settings).generate(w_str)
+    wc_obj = WordCloud(**w_settings).generate(w_str)
     # 保存到文件
-    wc.to_file(word_cloud_filename)
+    wc_obj.to_file(word_cloud_filename)
 
 
 # 打开弹幕文件
-def read_barrage_file(filename):
-    with open(filename, mode='r', encoding='utf-8') as f:
+def read_barrage_file(barrage_filename):
+    with open(barrage_filename, mode='r', encoding='utf-8') as f:
         barrages = f.read()
         return barrages
 
-
-# 开始主流程
+# 词云生成主函数
 def bwc_main(barrage_filename, word_cloud_filename):
-    genWordCloud(word_separate(read_barrage_file(barrage_filename)), word_cloud_filename)
+    barrages = read_barrage_file(barrage_filename)
+    word_list = word_separate(barrages)
+    #图片无法重写，故需进行文件存在校验
+    if mytool.checkFileExist(word_cloud_filename):
+        print('词云图片已存在')
+    else:
+        genWordCloud(word_list, word_cloud_filename)

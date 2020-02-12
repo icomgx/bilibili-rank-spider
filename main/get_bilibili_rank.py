@@ -19,19 +19,12 @@ items = soup.find_all('li', {'class': 'rank-item'})
 av_items_list = []  # 存储需要处理的视频av号码
 
 # 获取当前python文件及上一级的路径，以构造稳定的sqlite文件存储路径
-current_abstract_folder = os.path.abspath('.')  # 表示当前所处的文件夹的绝对路径
-project_folder = os.path.abspath('..')  # 表示当前所处的文件夹上一级文件夹的绝对路径
-sqlite_folder = project_folder + "\\database\\bilibili_rank.db3"
-
-debug = True  # deubg调试开关，生产环境关闭
+current_abstract_folder=os.path.abspath('.')   #表示当前所处的文件夹的绝对路径
+project_folder=os.path.abspath('..')  #表示当前所处的文件夹上一级文件夹的绝对路径
+sqlite_folder = project_folder+"\\database\\bilibili_rank.db3"
 
 # 主工作流程
 def main_func():
-    """
-    主工作流程
-
-    :return: 固定值，为None
-    """
     # 打印标题
     print(soup.title.text)
 
@@ -41,7 +34,7 @@ def main_func():
 
     ranksort_start = time.time()
 
-    item_index = 1
+    item_index = 1;
     # 遍历排行榜中的数据
     for item in items:
         title = item.find('a', {'class': 'title'}).text
@@ -54,7 +47,7 @@ def main_func():
         av_id = uri[len('https://www.bilibili.com/video/'):]
         # 添加到数据库
         # add_rank_info_into_db(db_connection,cursor,rank, title, score, visit, up, up_id, av_id, uri)
-        add_rank_info_into_db(db_connection, cursor, rank, title, score, visit, up, up_id, av_id, uri)
+        add_rank_info_into_db(db_connection,cursor,rank, title, score, visit, up, up_id, av_id, uri)
 
         print(f'the item_index index is {item_index}')
         item_index += 1
@@ -70,15 +63,16 @@ def main_func():
 
     barrage_start = time.time()
 
-    barrage_item_index = 1
+    barrage_item_index = 1;
     for avid in av_items_list:
-        one_start = time.time()
+
+        one_start=time.time()
 
         # 弹幕文件处理
         barrage_list = gv.get_barrage(gv.get_cid(avid))  # 获取对应视频av的弹幕列表
         gen_time = time.strftime('%Y%m%d', time.localtime(time.time()))  # 获取当日期为生成日期
         # barrage_folder = project_folder+"\\barrage\\"
-        barrage_file_full_name = project_folder + "\\barrage\\" + f'{avid}_{gen_time}.txt'
+        barrage_file_full_name = project_folder+"\\barrage\\"+f'{avid}_{gen_time}.txt'
         # barrage_filename = f(barrage_folder+'{avid}_{gen_time}.txt'  # 定义弹幕文件路径和名称
         # barrage_filename = f'word_cloud_img/txt/{avid}_{gen_time}.txt'  # 定义弹幕文件路径和名称
         gv.vb_main(avid, barrage_file_full_name)  # 启动生成弹幕文件
@@ -88,11 +82,11 @@ def main_func():
         barrage_item_index += 1
 
         # 弹幕文件词云生成
-        word_cloud_image_full_name = project_folder + "\\word_cloud_img\\" + f'{avid}_{gen_time}.png'
+        word_cloud_image_full_name = project_folder+"\\word_cloud_img\\"+f'{avid}_{gen_time}.png'
         # word_cloud_image_filename = f'word_cloud_img/{avid}_{gen_time}.png'  # 定义词云图片的路径和名称
         gb.bwc_main(barrage_file_full_name, word_cloud_image_full_name)  # 启动读取弹幕文件生成词云
 
-        one_end = time.time()
+        one_end=time.time()
         print("Execution Time: ", one_end - one_start)
 
     print(f'完成共计{len(av_items_list)}个视频弹幕的爬取与词云的生成...')
@@ -100,23 +94,9 @@ def main_func():
     barrage_end = time.time()
     print("barrage Execution Time: ", barrage_end - barrage_start)
 
-
-def add_rank_info_into_db(db_connection, cursor, rank, title, score, visit, up, up_id, av_id, uri):
-    """
-    将TOP100排行榜信息添加到数据库
-
-    :param db_connection: sqlite3连接对象
-    :param cursor: sqlite3 connection数据库指针
-    :param rank: bilibili排行榜视频数据
-    :param title: 视频标题
-    :param score: 视频评分
-    :param visit: 视频播放量
-    :param up: 视频发布者
-    :param up_id: 视频发布者ID
-    :param av_id: 视频ID
-    :param uri: 视频在bilibili.com上的path（俗称uri）
-    :return: None
-    """
+# 将TOP100排行榜信息添加到数据库
+# def add_rank_info_into_db(db_connection,cursor,rank, title, score, visit, up, up_id, av_id, uri):
+def add_rank_info_into_db(db_connection,cursor,rank, title, score, visit, up, up_id, av_id, uri):
     sql = f'INSERT INTO rank_list(rank,title,score,visit,up,up_id,av_id,url,get_time)' \
           f'VALUES(\'{rank}\',\'{title}\',\'{score}\',\'{visit}\',\'{up}\',\'{up_id}\',\'{av_id}\',\'{uri}\',' \
           f'datetime(\'now\')) '
@@ -124,17 +104,16 @@ def add_rank_info_into_db(db_connection, cursor, rank, title, score, visit, up, 
     cursor.execute(sql)
     # 提交事务
     db_connection.commit()
+    # # 关闭光标对象
+    # cursor.close()
+    # # 关闭数据库连接
+    # con.close()
 
+# 弹幕信息添加到数据库
+# av_id 弹幕所属av号码 barrage_list弹幕列表
+# def add_video_barrage_into_db(av_id, barrage_list):
+def add_video_barrage_into_db(db_connection,cursor,av_id, barrage_list):
 
-def add_video_barrage_into_db(db_connection, cursor, av_id, barrage_list):
-    """
-    弹幕信息添加到数据库
-    :param db_connection: sqlite3数据库连接
-    :param cursor: sqlite3数据库指针
-    :param av_id: 弹幕所属av号码
-    :param barrage_list: 弹幕列表
-    :return: None
-    """
     for barrage in barrage_list:
         # con = sqlite3.connect(sqlite_folder)
         # cursor = con.cursor()
@@ -149,7 +128,6 @@ def add_video_barrage_into_db(db_connection, cursor, av_id, barrage_list):
         # # 关闭数据库连接
         # con.close()
         # # print(f'av:{av_id}添加弹幕: {barrage} \r\n ok!')
-
 
 # 入口
 if __name__ == '__main__':
