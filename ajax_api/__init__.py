@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from flask import *
-from ..main import get_bilibili_rank
+from main import get_bilibili_rank
 import json
 
 app = Flask("bilibili_rank_spider_ui")
