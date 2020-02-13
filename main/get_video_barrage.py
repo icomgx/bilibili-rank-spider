@@ -1,6 +1,6 @@
 import json
 import re
-from main import public_smalltool as mytool
+from . import public_smalltool as mytool
 
 # 根据视频的av号获取cid
 def get_cid(av_full, log_general_folder):

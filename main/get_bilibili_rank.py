@@ -3,9 +3,9 @@ import schedule
 import time
 import os
 from bs4 import BeautifulSoup
-from main import get_video_barrage as gv
-from main import gen_bwc as gb
-from main import public_smalltool as mytool
+from . import get_video_barrage as gv
+from . import gen_bwc as gb
+from . import public_smalltool as mytool
 
 
 ################################
