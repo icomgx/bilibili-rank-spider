@@ -2,22 +2,17 @@
 import jieba
 # 生成词云图的库
 from wordcloud import WordCloud
-from main import public_smalltool as mytool
+import public_smalltool as mytool
 import logging
 
-# 去除“Building prefix dict from the default dictionary ...”的提示
-jieba.setLogLevel(logging.INFO)
+jieba.setLogLevel(logging.INFO) # 去除“Building prefix dict from the default dictionary ...”的提示
 
 # 分词
-
-
 def word_separate(barrage_str):
     w_list = jieba.lcut(barrage_str)
     return w_list
 
 # 生成词云图并保存
-
-
 def genWordCloud(w_list, word_cloud_filename):
     w_str = ' '.join(w_list)
     w_settings = {
@@ -40,13 +35,11 @@ def read_barrage_file(barrage_filename):
         return barrages
 
 # 词云生成主函数
-
-
 def bwc_main(barrage_filename, word_cloud_filename):
     barrages = read_barrage_file(barrage_filename)
     word_list = word_separate(barrages)
-    # 图片无法重写，故需进行文件存在校验
     if mytool.checkFileExist(word_cloud_filename):
-        print('词云图片已存在')
+        return 1
     else:
         genWordCloud(word_list, word_cloud_filename)
+        return 0

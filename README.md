@@ -29,7 +29,15 @@ bilibili排行榜数据可视化项目-初学者项目
 
  - ShengFAN_ [bilibili](https://space.bilibili.com/496636524 "前往他的bilibili")
 
+   
+
+### 2020-03-08：
+
+ - 完善了不存在弹幕的视频抓取策略
+ - 加上了MySQL接口，待deBug
+
 ### 2020-02-11 #2：
+
  - 删除了cid冗余代码，加快程序运行速度
  - 完善了将不存在视频av号保存至av_id_404_list.txt功能，文件写模式为w+，并加上了注释
 

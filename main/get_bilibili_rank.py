@@ -1,12 +1,14 @@
 import sqlite3
 import schedule
+import re
+import pymysql
 import time
 import os
 from bs4 import BeautifulSoup
-from . import get_video_barrage as gv
-from . import gen_bwc as gb
-from . import public_smalltool as mytool
 
+import get_video_barrage as gv
+import gen_bwc as gb
+import public_smalltool as mytool
 
 ################################
 # 定义全局变量
@@ -23,21 +25,19 @@ class website_ele:
         self.v_url = v_url
         self.av_id = av_id
 
-
-bilibili_ranking_all_url = 'https://www.bilibili.com/ranking'  # 排行榜url
+bilibili_ranking_all_url = 'https://www.bilibili.com/ranking/all/0/0/1'  # 每日排行榜url
 
 time_in_filename_str = time.strftime('%Y%m%d', time.localtime(time.time()))  # 获取当前日期用作数据库名/弹幕子文件夹路径/词云子文件路径
 
 ranking_all_avid_list = []  # 存储需要处理的视频av号码
 
-project_folder = os.path.abspath('..')  # 表示当前所处的文件夹上一级文件夹的绝对路径
+project_folder = os.path.abspath('..')  #表示当前所处的文件夹上一级文件夹的绝对路径
 
-db_general_folder = f'{project_folder}\\database\\'  # 数据库存储路径
-barrage_general_folder = f'{project_folder}\\barrage\\{time_in_filename_str}\\'  # 弹幕文件存储路径
-wordcloud_pic_general_folder = f'{project_folder}\\wordCloudImg\\{time_in_filename_str}\\'  # 词云存储路径
-daily_log_general_folder = f'{project_folder}\\log\\{time_in_filename_str}\\'  # 每日日志存储路径，打算用于保存命令行中输出的文字
-general_log_general_folder = f'{project_folder}\\log\\'  # 总日志存储路径，不存在的视频av号列表文件即保存在这个路径下
-
+db_general_folder = f'{project_folder}\\database\\'                                             # 数据库存储路径
+barrage_general_folder = f'{project_folder}\\barrage\\{time_in_filename_str}\\'                 # 弹幕文件存储路径
+wordcloud_pic_general_folder = f'{project_folder}\\wordCloudImg\\{time_in_filename_str}\\'      # 词云存储路径
+daily_log_general_folder = f'{project_folder}\\log\\{time_in_filename_str}\\'                   # 每日日志存储路径，打算用于保存命令行中输出的文字
+general_log_general_folder = f'{project_folder}\\log\\'                                         # 总日志存储路径，不存在的视频av号列表文件即保存在这个路径下
 
 ################################
 
@@ -52,17 +52,34 @@ def ProjectFileDirCheck():
     print(f'爬虫总日志{mytool.mkdir(general_log_general_folder)}')
     print(f'爬虫每日日志{mytool.mkdir(daily_log_general_folder)}')
 
-
 ################################
 
 ################################
 # 数据库操作
+def DBDecide(databasename):
+    if databasename == 0:   # SQLite3数据库
+        print("SQLite3数据库可用")
+        return 0
+    if databasename == 1:
+        return checkMySqlEnable()
+
+def checkMySqlEnable():
+    mysql_version_shell = 'mysql -V'
+    version_shell_result = os.popen(mysql_version_shell)
+    returnstring = version_shell_result.read()
+    error_return = "'mysql'不是内部或外部命令，也不是可运行的程序或批处理文件"
+    if returnstring == error_return:
+        print("未正确配置MySQL，将使用SQLite3数据库")
+        return 0
+    else:
+        print("MySQL已配置并可使用")
+        return 1
 
 # 初始化sqlite数据库
 def sqlitedb_init():
-    database_name = 'bilibili_rank_' + time_in_filename_str + '.db3'
+    database_name = 'bilibili_rank_'+time_in_filename_str+'.db3'
 
-    sqlitedbpath = db_general_folder + database_name
+    sqlitedbpath = db_general_folder+database_name
 
     conn = sqlite3.connect(sqlitedbpath)
     cursor = conn.cursor()
@@ -100,7 +117,7 @@ def sqlitedb_init():
     "barrage_text" TEXT,
     "get_time" TEXT
     );
-    """
+    """    
     cursor.execute(create_table_sql)
     conn.commit()
     print("Barrage_List数据表初始化完成")
@@ -110,25 +127,83 @@ def sqlitedb_init():
 
     return sqlitedbpath
 
+def mysqldb_init():
+    drop_table_sql_head = "DROP TABLE IF EXISTS "
+    drop_table_sql_end = ";\n"
+
+    create_table_sql_head = 'CREATE TABLE '
+    create_table_sql_end = """ (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `rank` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+      `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+      `score` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+      `visit` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+      `up` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+      `up_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+      `av_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+      `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+      `get_time` datetime(0) NULL DEFAULT NULL,
+      PRIMARY KEY (`id`) USING BTREE
+    ) 
+    """
+
+    f = open('mysql_count_psd.txt', 'r')
+    count_psd_pair = list()
+    for line in open('mysql_count_psd.txt'):
+        line = f.readline()
+        count_psd_pair.append(line)
+    f.close()
+
+    my_user = count_psd_pair[0]
+    my_user = my_user[:-1]  # 由于按行读取文件时末尾有'\n'，故需将其去除
+    my_psd = count_psd_pair[1]
+
+    mysql_login_dic = dict(host = 'localhost', port = 3306, user = my_user, passwd = my_psd, db = 'bilibili_rank', charset='utf8')
+    # connection = pymysql.Connect(
+    #     host='localhost',
+    #     port=3306,
+    #     user=my_user,
+    #     passwd=my_psd,
+    #     db='bilibili_rank',
+    #     charset='utf8'
+    # )
+    connection = pymysql.connect(mysql_login_dic)
+
+    print("MySQL数据库完成连接")
+
+    time_ymd = time.strftime("%Y_%m_%d", time.localtime())
+
+    table_head = 'bilibili_rank_' + time_in_filename_str
+
+    cursor = connection.cursor()
+    drop_table_sql = drop_table_sql_head + table_head + drop_table_sql_end
+    cursor.execute(drop_table_sql)
+    connection.commit()
+
+    create_table_sql = create_table_sql_head + table_head + create_table_sql_end
+    cursor.execute(create_table_sql)
+    connection.commit()
+    connection.close()
+    cursor.close()
+    return mysql_login_dic
 
 # 将TOP100排行榜信息添加到数据库
-def add_rank_info_into_db(conn, cursor, data_element):
+def add_rank_info_into_db(conn,cursor,data_element):
     current_time = time.time()
     sql = f'INSERT INTO rank_list(rank,title,score,visit_time_count,up_name,up_id,av_id,v_url,get_time) ' \
           f'VALUES(\'{data_element.rank}\',\'{data_element.title}\',\'{data_element.score}\'' \
           f',\'{data_element.visit_time_count}\',\'{data_element.up_name}\',\'{data_element.up_id}\'' \
           f',\'{data_element.av_id}\',\'{data_element.v_url}\'' \
-          f',datetime(\'now\',\'localtime\')) '  # 输出本机时间使用datetime('now','localtime')
+          f',datetime(\'now\',\'localtime\')) ' # 输出本机时间使用datetime('now','localtime')
 
     # 执行SQL语句
     cursor.execute(sql)
     # 提交事务
     conn.commit()
 
-
 # 弹幕信息添加到数据库
 # av_id 弹幕所属av号码 barrage_list弹幕列表
-def add_video_barrage_into_db(conn, cursor, av_id, barrage_list):
+def add_video_barrage_into_db(conn,cursor,av_id, barrage_list):
     for barrage in barrage_list:
         sql = f'INSERT INTO barrage_list(barrage_av,barrage,get_time) ' \
               f'VALUES(\'{av_id}\',\'{barrage}\', datetime(\'now\',\'localtime\'))'
@@ -137,7 +212,6 @@ def add_video_barrage_into_db(conn, cursor, av_id, barrage_list):
         # 提交事务
         conn.commit()
         # # print(f'av:{av_id}添加弹幕: {barrage} \r\n ok!')
-
 
 ################################
 
@@ -162,8 +236,7 @@ def website_item_download(bilibili_ranking_all_url):
         website_item = soup.find_all('li', {'class': 'rank-item'})
         return 0, website_item
     else:
-        return -1, 0
-
+        return -1,0
 
 # item列表解析，构造并返回每个item信息对象
 def ranking_item_analysis(item):
@@ -179,20 +252,37 @@ def ranking_item_analysis(item):
 
     return ranking_element
 
+################################
+# 主功能函数
 
-def main(rank_url):
-    status, website_item = website_item_download(rank_url)
-    if status == -1:  # 网络状态异常
+def bilibili_rank_main(bilibili_ranking_all_url):
+    status, website_item = website_item_download(bilibili_ranking_all_url)
+    if status == -1: # 网络状态异常
         print("网络访问异常，请检查网络状态\n即将退出程序")
         return -1
-    else:  # 网络正常
+    else:            # 网络正常
         # 配置工程需要保存文件所在的文件夹
         ProjectFileDirCheck()
-        sqlite_folder = sqlitedb_init()
+        # databasename = input(f'请输入存储的数据库名称（0:SQLite3数据库，1:MySQL数据库）:')
+        # print(databasename)
+        databasename = 0
+        if databasename == '0':
+            databasetype = 0
+        elif databasename == '1':
+            databasetype = checkMySqlEnable()
+        else:
+            print("输入，默认使用SQLite3数据库")
+            databasetype = 0
 
-        # 建立sqlite的连接，获取游标cursor
-        bilibili_ranking_all_db_conn = sqlite3.connect(sqlite_folder)
-        bilibili_ranking_all_db_cursor = bilibili_ranking_all_db_conn.cursor()
+        if databasetype == 0:
+            sqlite_folder = sqlitedb_init()
+            # 建立sqlite的连接，获取游标cursor
+            bilibili_ranking_all_db_conn = sqlite3.connect(sqlite_folder)
+            bilibili_ranking_all_db_cursor = bilibili_ranking_all_db_conn.cursor()
+        if databasetype == 1:
+            mysql_login_dic = mysqldb_init()
+            bilibili_ranking_all_db_conn = pymysql.connect(mysql_login_dic)
+            bilibili_ranking_all_db_cursor = bilibili_ranking_all_db_conn.cursor()
 
         # 爬取排行榜信息
         crawl_start = time.time()
@@ -234,19 +324,28 @@ def main(rank_url):
             if status < 0:  # 视频异常处理，
                 print(f'编号为{avid}的视频不存在')
             else:
-                barrage_file_full_name = barrage_general_folder + f'barrage_{avid}_{time_in_filename_str}.txt'
+                barrage_file_full_name = barrage_general_folder+f'barrage_{avid}_{time_in_filename_str}.txt'
                 status = gv.vb_main(av_cid, barrage_file_full_name, general_log_general_folder)  # 保存弹幕文件
 
-                # 由于弹幕文件较大，存在数据库IO不足的问题，故暂时不使用数据库存储
-                # add_video_barrage_into_db(bilibili_ranking_all_db_conn,cursor,avid, barrage_list)
+				# 增加了弹幕不存在时的异常处理
+                if status == 0:
+                    print(f'排行榜第{barrage_item_index}名的视频弹幕不存在，将跳过该视频')
+                else:
+                    # 由于弹幕文件较大，存在数据库IO不足的问题，故暂时不使用数据库存储
+                    # add_video_barrage_into_db(bilibili_ranking_all_db_conn,cursor,avid, barrage_list)
+                    if status == 1:
+                        print(f'排行榜第{barrage_item_index}名的视频弹幕已存在')
+                    else:
+                        print(f'排行榜第{barrage_item_index}名的视频弹幕已下载')
 
-                print(f'排行榜第{barrage_item_index}名的视频弹幕已下载')
-
-                # 弹幕文件词云生成
-                word_cloud_image_full_name = wordcloud_pic_general_folder + f'wordcloud_{avid}_{time_in_filename_str}.png'
-                # 读取弹幕文件生成词云
-                gb.bwc_main(barrage_file_full_name, word_cloud_image_full_name)
-                print(f'排行榜第{barrage_item_index}名的视频弹幕词云已生成')
+                    # 弹幕文件词云生成
+                    word_cloud_image_full_name = wordcloud_pic_general_folder+f'wordcloud_{avid}_{time_in_filename_str}.png'
+                    # 读取弹幕文件生成词云
+                    status = gb.bwc_main(barrage_file_full_name, word_cloud_image_full_name)
+                    if status == 1:
+                        print(f'排行榜第{barrage_item_index}名的视频弹幕词云已存在')
+                    else:
+                        print(f'排行榜第{barrage_item_index}名的视频弹幕词云已生成')
 
                 barrage_item_index += 1
 
@@ -256,21 +355,21 @@ def main(rank_url):
         print(f'弹幕下载及词云生成共耗时: {barrage_end - barrage_start} s')
         return 0
 
-
 # 主函数
 if __name__ == '__main__':
     print(f'当前时间为{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}')
     start = time.time()
-    status = main(bilibili_ranking_all_url)
+    status = bilibili_rank_main(bilibili_ranking_all_url)
     if status == 0:  # 网络状态正常
         end = time.time()
         print(f'排行榜爬虫总耗时: {end - start}')
     print('即将退出爬虫')
+    input("Press any key to finish: ")
     exit()
 
 # 每天到指定的时间执行拉取
 # timer = input('请输入每天定时获取的时间如\"20:00\":')
-# schedule.every().day.at(timer).do(main)
+# schedule.every().day.at(timer).do(bilibili_rank_main)
 # print('定时服务启动...')
 # while True:
 #     schedule.run_pending()  # 运行所有可运行的任务
