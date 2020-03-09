@@ -364,7 +364,7 @@ if __name__ == '__main__':
         end = time.time()
         print(f'排行榜爬虫总耗时: {end - start}')
     print('即将退出爬虫')
-    input("Press any key to finish: ")
+    # input("Press any key to finish: ")
     exit()
 
 # 每天到指定的时间执行拉取
