@@ -329,7 +329,7 @@ def bilibili_rank_main(bilibili_ranking_all_url):
 
 				# 增加了弹幕不存在时的异常处理
                 if status == 0:
-                    print(f'排行榜第{barrage_item_index}名的视频弹幕不存在，将跳过该视频')
+                    print(f'排行榜第{barrage_item_index}名的视频弹幕不存在，将跳过该视频，该视频编号为{avid}')
                 else:
                     # 由于弹幕文件较大，存在数据库IO不足的问题，故暂时不使用数据库存储
                     # add_video_barrage_into_db(bilibili_ranking_all_db_conn,cursor,avid, barrage_list)
@@ -357,6 +357,7 @@ def bilibili_rank_main(bilibili_ranking_all_url):
 
 # 主函数
 if __name__ == '__main__':
+    print('================================================')
     print(f'当前时间为{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}')
     start = time.time()
     status = bilibili_rank_main(bilibili_ranking_all_url)
@@ -364,6 +365,7 @@ if __name__ == '__main__':
         end = time.time()
         print(f'排行榜爬虫总耗时: {end - start}')
     print('即将退出爬虫')
+    print('================================================')
     # input("Press any key to finish: ")
     exit()
 
