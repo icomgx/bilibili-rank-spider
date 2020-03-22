@@ -27,8 +27,10 @@ errorlog = f'{daily_log_general_folder}异常日志.log'
 ordilog = f'{daily_log_general_folder}正常日志.log'
 
 status = run_cmd2file(command, ordilog, errorlog)
-if status == 0:
+
+errorlogsize = mytool.get_FileSize(errorlog)
+if errorlogsize == 0:
     print(f'爬虫已正常结束，如有需要请查看正常日志')
 else:
-    print(f'爬虫异常退出，请查看异常日志')
+    print(f'爬虫工作异常，请查看异常日志')
 input('Press any key to exit:')

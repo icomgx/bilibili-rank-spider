@@ -43,3 +43,7 @@ def bugavid_file_write(bug_av_id, filename):
             f.write('\n')
             f.close()
             print(f'{bug_av_id} 已加入列表')
+
+# 获取当前文件大小
+def get_FileSize(filePath):
+	return os.path.getsize(filePath)

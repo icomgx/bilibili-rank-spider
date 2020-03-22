@@ -301,9 +301,6 @@ def bilibili_rank_main(bilibili_ranking_all_url):
             # 更新ranking_all_avid_list列表
             ranking_all_avid_list.append(ranking_element.av_id)
 
-            # 打印排行榜中每条视频相关信息
-            # print(f'{ranking_element.rank} {ranking_element.title} {ranking_element.av_id} {ranking_element.up_name} {ranking_element.up_id} \r\n Insert database ok ')
-
         print(f'已完成排行榜中共{len(website_item)}条数据的爬取...\n继续进行对应视频弹幕的爬取...')
 
         # 如需将弹幕文件保存到数据库，则需将下面两条语句移至本函数尾部
@@ -363,7 +360,7 @@ if __name__ == '__main__':
     status = bilibili_rank_main(bilibili_ranking_all_url)
     if status == 0:  # 网络状态正常
         end = time.time()
-        print(f'排行榜爬虫总耗时: {end - start}')
+        print(f'排行榜爬虫总耗时: {end - start}s')
     print('即将退出爬虫')
     print('================================================')
     # input("Press any key to finish: ")
