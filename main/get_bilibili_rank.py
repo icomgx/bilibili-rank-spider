@@ -9,13 +9,14 @@ from bs4 import BeautifulSoup
 import get_video_barrage as gv
 import gen_bwc as gb
 import public_smalltool as mytool
+import bv2av as b2a
 
 ################################
 # 定义全局变量
 
 # 将排行榜中每个条目定义为website_ele对象
 class website_ele:
-    def __init__(self, rank, title, score, visit_time_count, up_name, up_id, av_id, v_url):
+    def __init__(self, rank, title, score, visit_time_count, up_name, up_id, av_id, bv_id, v_url):
         self.title = title
         self.score = score
         self.rank = rank
@@ -24,6 +25,7 @@ class website_ele:
         self.up_id = up_id
         self.v_url = v_url
         self.av_id = av_id
+        self.bv_id = bv_id
 
 bilibili_ranking_all_url = 'https://www.bilibili.com/ranking/all/0/0/1'  # 每日排行榜url
 
@@ -32,6 +34,8 @@ time_in_filename_str = time.strftime('%Y%m%d', time.localtime(time.time()))  # �
 ranking_all_avid_list = []  # 存储需要处理的视频av号码
 
 project_folder = os.path.abspath('..')  #表示当前所处的文件夹上一级文件夹的绝对路径
+
+g_b2a_error_tag = 1
 
 db_general_folder = f'{project_folder}\\database\\'                                             # 数据库存储路径
 barrage_general_folder = f'{project_folder}\\barrage\\{time_in_filename_str}\\'                 # 弹幕文件存储路径
@@ -99,6 +103,7 @@ def sqlitedb_init():
     "up_name" TEXT,
     "up_id" TEXT,
     "av_id" TEXT,
+    "bv_id" TEXT,
     "v_url" TEXT,
     "get_time" TEXT
     );"""
@@ -190,10 +195,10 @@ def mysqldb_init():
 # 将TOP100排行榜信息添加到数据库
 def add_rank_info_into_db(conn,cursor,data_element):
     current_time = time.time()
-    sql = f'INSERT INTO rank_list(rank,title,score,visit_time_count,up_name,up_id,av_id,v_url,get_time) ' \
+    sql = f'INSERT INTO rank_list(rank,title,score,visit_time_count,up_name,up_id,av_id,bv_id,v_url,get_time) ' \
           f'VALUES(\'{data_element.rank}\',\'{data_element.title}\',\'{data_element.score}\'' \
           f',\'{data_element.visit_time_count}\',\'{data_element.up_name}\',\'{data_element.up_id}\'' \
-          f',\'{data_element.av_id}\',\'{data_element.v_url}\'' \
+          f',\'{data_element.av_id}\',\'{data_element.bv_id}\',\'{data_element.v_url}\'' \
           f',datetime(\'now\',\'localtime\')) ' # 输出本机时间使用datetime('now','localtime')
 
     # 执行SQL语句
@@ -240,6 +245,7 @@ def website_item_download(bilibili_ranking_all_url):
 
 # item列表解析，构造并返回每个item信息对象
 def ranking_item_analysis(item):
+    global g_b2a_error_tag
     title = item.find('a', {'class': 'title'}).text
     score = item.find('div', {'class': 'pts'}).find('div').text
     rank = item.find('div', {'class': 'num'}).text
@@ -247,8 +253,14 @@ def ranking_item_analysis(item):
     up_name = item.find_all('a')[2].text
     up_id = item.find_all('a')[2].get('href')[len('//space.bilibili.com/'):]
     uri = item.find('a', {'class': 'title'}).get('href')
-    av_id = uri[len('https://www.bilibili.com/video/'):]
-    ranking_element = website_ele(rank, title, score, visit_time_count, up_name, up_id, av_id, uri)
+    bv_id = uri[len('https://www.bilibili.com/video/'):]
+    if g_b2a_error_tag == 1:
+        if(b2a.check_b2a_a2b(str(bv_id))):
+            g_b2a_error_tag = 0
+        else:
+            print('bv2av转换异常，请检查相关代码')
+    av_id = 'av'+str(b2a.dec(bv_id))
+    ranking_element = website_ele(rank, title, score, visit_time_count, up_name, up_id, av_id, bv_id, uri)
 
     return ranking_element
 
@@ -313,7 +325,7 @@ def bilibili_rank_main(bilibili_ranking_all_url):
         # 爬取视频弹幕
         barrage_start = time.time()
 
-        barrage_item_index = 1;
+        barrage_item_index = 1
         for avid in ranking_all_avid_list:
 
             # 根据完整的av号获取弹幕文件，视频状态正常时可解析到cid，否则将av号写入txt

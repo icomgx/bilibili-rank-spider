@@ -32,7 +32,7 @@ def download_website_page(weburl):
 # 将不存在的视频AV号保存至文件
 def bugavid_file_write(bug_av_id, filename):
     av_bug = []
-    with open('accounts.txt', 'r') as f:
+    with open('bugAVid.txt', 'r+') as f:
         for line in f:
             av_bug.append(line.strip('\n'))
     if bug_av_id in av_bug:
