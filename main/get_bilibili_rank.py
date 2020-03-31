@@ -194,15 +194,16 @@ def mysqldb_init():
 
 # 将TOP100排行榜信息添加到数据库
 def add_rank_info_into_db(conn,cursor,data_element):
-    current_time = time.time()
-    sql = f'INSERT INTO rank_list(rank,title,score,visit_time_count,up_name,up_id,av_id,bv_id,v_url,get_time) ' \
-          f'VALUES(\'{data_element.rank}\',\'{data_element.title}\',\'{data_element.score}\'' \
-          f',\'{data_element.visit_time_count}\',\'{data_element.up_name}\',\'{data_element.up_id}\'' \
-          f',\'{data_element.av_id}\',\'{data_element.bv_id}\',\'{data_element.v_url}\'' \
-          f',datetime(\'now\',\'localtime\')) ' # 输出本机时间使用datetime('now','localtime')
+
+    sql = f'INSERT INTO rank_list(rank,title,score,visit_time_count,up_name,up_id,av_id,bv_id,v_url) ' \
+          f'VALUES(?,?,?,?,?,?,?,?,?)'
 
     # 执行SQL语句
-    cursor.execute(sql)
+    cursor.execute(sql, (data_element.rank, data_element.title, data_element.score, data_element.visit_time_count, data_element.visit_time_count, data_element.up_name, data_element.av_id, data_element.bv_id, data_element.v_url))
+
+    updateTimesql = "UPDATE rank_list SET get_time = datetime('now','localtime')"+f' WHERE rank = {data_element.rank}'
+
+    cursor.execute(updateTimesql)
     # 提交事务
     conn.commit()
 

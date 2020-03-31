@@ -34,7 +34,7 @@ errorlogfile = f'{daily_log_general_folder}异常日志.log'
 ordilogfile = f'{daily_log_general_folder}正常日志.log'
 errorlog_open = open(errorlogfile,'w+')
 errorlog_open.close()
-# status = run_cmd2file(run_spider_command, ordilogfile, errorlogfile)
+status = run_cmd2file(run_spider_command, ordilogfile, errorlogfile)
 
 errorlogsize = mytool.get_FileSize(errorlogfile)
 if errorlogsize == 0:

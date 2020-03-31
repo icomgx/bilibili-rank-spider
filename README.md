@@ -29,6 +29,9 @@ bilibili排行榜数据可视化项目-初学者项目
 
  - ShengFAN_ [bilibili](https://space.bilibili.com/496636524 "前往他的bilibili")
 
+### 2020-03-31:
+ - 改进了数据库IO操作，通过拆分SQL语句，解决了“sqlite3.OperationalError: near "S": syntax error”问题（由于值中存在单引号等符号）
+
 ### 2020-03-24:
  - 增加了将B站改版后BV号映射回原AV号的功能，使原API能继续使用
  - 改进了通过cmd执行脚本，可直接在cmd中打开正常/异常日志
