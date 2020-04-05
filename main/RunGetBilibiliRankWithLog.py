@@ -36,17 +36,21 @@ errorlog_open = open(errorlogfile,'w+')
 errorlog_open.close()
 status = run_cmd2file(run_spider_command, ordilogfile, errorlogfile)
 
+def inputNumAction():
+    inputnum = input('输入1打开正常日志，输入2打开异常日志，输入其他数字退出:')
+    if inputnum == '1':
+        open_oridlog_cmd = f'notepad {ordilogfile}'
+        simple_rum_cmd(open_oridlog_cmd)
+    elif inputnum == '2':
+        open_errorlog_cmd = f'notepad {errorlogfile}'
+        simple_rum_cmd(open_errorlog_cmd)
+    else:
+        exit()
+
 errorlogsize = mytool.get_FileSize(errorlogfile)
 if errorlogsize == 0:
     print(f'爬虫已正常结束，如有需要请查看正常日志')
 else:
     print(f'爬虫工作异常，请查看异常日志')
-inputnum = input('输入1打开正常日志，输入2打开异常日志，输入其他数字退出:')
-if inputnum == '1':
-    open_oridlog_cmd = f'notepad {ordilogfile}'
-    simple_rum_cmd(open_oridlog_cmd)
-elif inputnum == '2':
-    open_errorlog_cmd = f'notepad {errorlogfile}'
-    simple_rum_cmd(open_errorlog_cmd)
-else:
-    exit()
+while(1):
+    inputNumAction()

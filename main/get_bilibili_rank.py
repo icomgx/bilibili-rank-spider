@@ -111,21 +111,21 @@ def sqlitedb_init():
     conn.commit()
     print("RANK_LIST数据表初始化完成")
 
-    # 初始化barrage_list数据表
-    drop_sql = "DROP TABLE IF EXISTS barrage_list;"
-    cursor.execute(drop_sql)
-    conn.commit()
-    create_table_sql = """
-        CREATE TABLE "barrage_list" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "barrage_av" TEXT,
-    "barrage_text" TEXT,
-    "get_time" TEXT
-    );
-    """    
-    cursor.execute(create_table_sql)
-    conn.commit()
-    print("Barrage_List数据表初始化完成")
+    # # 初始化barrage_list数据表
+    # drop_sql = "DROP TABLE IF EXISTS barrage_list;"
+    # cursor.execute(drop_sql)
+    # conn.commit()
+    # create_table_sql = """
+    #     CREATE TABLE "barrage_list" (
+    # "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    # "barrage_av" TEXT,
+    # "barrage_text" TEXT,
+    # "get_time" TEXT
+    # );
+    # """
+    # cursor.execute(create_table_sql)
+    # conn.commit()
+    # print("Barrage_List数据表初始化完成")
 
     cursor.close()
     conn.close()
