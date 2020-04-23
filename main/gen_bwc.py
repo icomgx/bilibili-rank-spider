@@ -40,6 +40,8 @@ def bwc_main(barrage_filename, word_cloud_filename):
     word_list = word_separate(barrages)
     if mytool.checkFileExist(word_cloud_filename):
         return 1
+    elif word_list[0] == '\x00': # 疑似文件写入错误，暂无好的解决办法 TODO待后续优化
+        return 2
     else:
         genWordCloud(word_list, word_cloud_filename)
         return 0

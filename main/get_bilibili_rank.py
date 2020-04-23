@@ -1,3 +1,4 @@
+# coding = utf-8
 import sqlite3
 import schedule
 import re
@@ -27,7 +28,7 @@ class website_ele:
         self.av_id = av_id
         self.bv_id = bv_id
 
-bilibili_ranking_all_url = 'https://www.bilibili.com/ranking/all/0/0/1'  # 每日排行榜url
+bilibili_ranking_all_url = 'http://www.bilibili.com/ranking/all/0/0/1'  # 每日排行榜url
 
 time_in_filename_str = time.strftime('%Y%m%d', time.localtime(time.time()))  # 获取当前日期用作数据库名/弹幕子文件夹路径/词云子文件路径
 
@@ -354,6 +355,8 @@ def bilibili_rank_main(bilibili_ranking_all_url):
                     status = gb.bwc_main(barrage_file_full_name, word_cloud_image_full_name)
                     if status == 1:
                         print(f'排行榜第{barrage_item_index}名的视频弹幕词云已存在')
+                    elif status == 2:
+                        print(f'排行榜第{barrage_item_index}名的视频弹幕文件异常，已跳过')
                     else:
                         print(f'排行榜第{barrage_item_index}名的视频弹幕词云已生成')
 
