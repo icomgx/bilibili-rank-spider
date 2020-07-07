@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/icomgx/bilibili-rank-spider#readme",
   "devDependencies": {
-    "electron": "^8.0.0",
+    "electron": "^8.2.4",
     "electron-squirrel-startup": "^1.0.0",
     "electron-winstaller": "^4.0.0",
     "jsexecpy": "^1.1.0"
