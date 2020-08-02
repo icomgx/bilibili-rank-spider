@@ -1,3 +1,17 @@
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+'''
+@File    :   gen_bwc.py
+@Time    :   2020/06/14 11:51:29
+@Author  :   Gu Pengcheng 
+@Version :   1.0
+@Contact :   lewisgu@outlook.com
+@License :   (C)Copyright
+@Desc    :   None
+'''
+
+# here put the import lib
+
 # 中文分词库
 import jieba
 # 生成词云图的库

@@ -1,3 +1,17 @@
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+'''
+@File    :   bv2av.py
+@Time    :   2020/06/14 11:50:18
+@Author  :   Gu Pengcheng 
+@Version :   1.0
+@Contact :   lewisgu@outlook.com
+@License :   (C)Copyright
+@Desc    :   None
+'''
+
+# here put the import lib
+
 table='fZodR9XQDSUm21yCkr6zBqiveYah8bt4xsWpHnJE7jL5VG3guMTKNPAwcF'
 tr={}
 for i in range(58):

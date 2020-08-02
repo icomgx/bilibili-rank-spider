@@ -1,3 +1,17 @@
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+'''
+@File    :   get_video_barrage.py
+@Time    :   2020/05/04 10:13:53
+@Author  :   Gu Pengcheng 
+@Version :   1.0
+@Contact :   lewisgu@outlook.com
+@License :   (C)Copyright
+@Desc    :   None
+'''
+
+# here put the import lib
+
 import json
 import re
 import public_smalltool as mytool

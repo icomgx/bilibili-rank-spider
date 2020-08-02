@@ -1,4 +1,16 @@
-# coding = utf-8
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+'''
+@File    :   get_bilibili_rank.py
+@Time    :   2020/05/04 10:13:31
+@Author  :   Gu Pengcheng 
+@Version :   1.0
+@Contact :   lewisgu@outlook.com
+@License :   (C)Copyright
+@Desc    :   None
+'''
+
+# here put the import lib
 import sqlite3
 import schedule
 import re
@@ -378,6 +390,7 @@ if __name__ == '__main__':
         end = time.time()
         print(f'排行榜爬虫总耗时: {end - start}s')
     print('即将退出爬虫')
+    print(f'结束时间为{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}')
     print('================================================')
     # input("Press any key to finish: ")
     exit()
